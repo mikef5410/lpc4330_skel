@@ -7,10 +7,7 @@ include mk/cross-tools.mk
 
 LDSCRIPT := standalone.ld
 
-LPCOPEN := $(PROJ_ROOT)/external/lpcopen/lpcopen
-LPCCHIP := $(LPCOPEN)/software/lpc_core/lpc_chip/chip_18xx_43xx
-LPCCHIP_COMMON := $(LPCOPEN)/software/lpc_core/lpc_chip/chip_common
-LPCIP := $(LPCOPEN)/software/lpc_core/lpc_ip
+
 
 ## LPC4330 Specific Definitions
 ARCH = armv7e-m
@@ -22,11 +19,17 @@ RAMK ?= 192
 
 
 ## LPCOPEN Definifions
-CORE_CHIP_SRCS = adc_18xx_43xx.c can_18xx_43xx.c clock_18xx_43xx.c dac_18xx_43xx.c enet_18xx_43xx.c gpdma_18xx_43xx.c
-CORE_CHIP_SRCS += i2c_18xx_43xx.c i2s_18xx_43xx.c iocon_18xx_43xx.c
-CORE_CHIP_SRCS += rtc_18xx_43xx.c ssp_18xx_43xx.c sysctl_18xx_43xx.c timer_18xx_43xx.c uart_18xx_43xx.c wwdt_18xx_43xx.c
-CORE_IP_SRCS = adc_001.c atimer_001.c ccan_001.c dac_001.c emc_001.c enet_001.c gima_001.c gpdma_001.c gpiogrpint_001.c gpiopinint_001.c i2c_001.c i2s_001.c lcd_001.c ritimer_001.c rtc_001.c sct_001.c sdmmc_001.c ssp_001.c timer_001.c usart_001.c wwdt_001.c eeprom_002.c
+LPCOPEN := $(PROJ_ROOT)/external/lpcopen/lpcopen
+LPCCHIP := $(LPCOPEN)/software/lpc_core/lpc_chip/chip_18xx_43xx
+LPCCHIP_COMMON := $(LPCOPEN)/software/lpc_core/lpc_chip/chip_common
+LPCIP := $(LPCOPEN)/software/lpc_core/lpc_ip
+CMSIS_INC := $(LPCOPEN)/software/CMSIS/CMSIS/Include
+CORE_CHIP_SRCS = adc_18xx_43xx.c ccan_18xx_43xx.c clock_18xx_43xx.c dac_18xx_43xx.c enet_18xx_43xx.c gpdma_18xx_43xx.c
+CORE_CHIP_SRCS += i2c_18xx_43xx.c i2s_18xx_43xx.c
+CORE_CHIP_SRCS += rtc_18xx_43xx.c ssp_18xx_43xx.c timer_18xx_43xx.c uart_18xx_43xx.c wwdt_18xx_43xx.c
+CORE_IP_SRCS = adc_001.c atimer_001.c ccan_001.c dac_001.c emc_001.c enet_001.c gpdma_001.c gpiogrpint_001.c gpiopinint_001.c i2c_001.c i2s_001.c lcd_001.c ritimer_001.c rtc_001.c sct_001.c sdmmc_001.c ssp_001.c timer_001.c usart_001.c wwdt_001.c eeprom_002.c
 LPCOPEN_OBJS := $(call CALC_OBJS,$(CORE_IP_SRCS) $(CORE_CHIP_SRCS))
+LPC_INC= -I $(LPCCHIP) -I $(LPCIP) -I $(LPCCHIP_COMMON) -I $(CMSIS_INC)
 
 ## FreeRTOS Definitions
 RTOS_SOURCE_DIR := $(PROJ_ROOT)/FreeRTOS/Source
@@ -44,11 +47,10 @@ LINKER_FLAGS=-nostartfiles -Xlinker -o$(AXF) -Xlinker -M -Xlinker -Map=$(PROG).m
 
 DEBUG=-g
 OPTIM=-O0
-LPC_INC= -I $(LPCCHIP) -I $(LPCIP)
 INCLUDE=-I . $(FREERTOS_INC) $(LPC_INC)
 
 CFLAGS = $(DEBUG) $(INCLUDE) \
-	 -D $(CHIP) -mcpu=$(CPU) -mthumb -march=$(ARCH) \
+	 -D CORE_M4 -mcpu=$(CPU) -mthumb -march=$(ARCH) \
 	 $(OPTIM) -T$(LDSCRIPT) \
 
 APP_SRCS =startup.c main.c
@@ -67,6 +69,7 @@ libFreeRTOS.a: $(FREERTOS_OBJS)
 liblpcopen.a: $(LPCOPEN_OBJS)
 	$(AR) cr $@ $?
 	$(RANLIB) $@
+	$(RM) -f $?
 
 $(PROG).elf : $(OBJS) startup.o Makefile
 	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(LINKER_FLAGS)
