@@ -76,8 +76,8 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
-#include "LPC43xx.h"
-#include "core_cm4.h"
+//#include "LPC43xx.h"
+//#include "core_cm4.h"
 
 /*-----------------------------------------------------------
  * Application specific definitions.
