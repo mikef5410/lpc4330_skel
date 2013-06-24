@@ -1,6 +1,6 @@
 [submodule "external/lpcopen"]
 	path = external/lpcopen
-	url = git@engine:/personal/jjones/lpcopen_v1p03
+	url = git@engine.global.tektronix.net:/personal/jjones/lpcopen_v1p03
 [submodule "external/FreeRTOS"]
 	path = external/FreeRTOS
 	url = git@engine.global.tektronix.net:/personal/mferrara/FreeRTOS
