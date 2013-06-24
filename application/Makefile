@@ -62,6 +62,7 @@ all: $(PROG).elf
 libFreeRTOS.a: $(FREERTOS_OBJS)
 	$(AR) cr $@ $?
 	$(RANLIB) $@
+	$(RM) -f $?
 
 liblpcopen.a: $(LPCOPEN_OBJS)
 	$(AR) cr $@ $?
