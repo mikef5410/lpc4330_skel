@@ -165,6 +165,11 @@ void vLEDTask(void *pvParameters)
   return;
 }
 
+void vApplicationMallocFailedHook(void)
+{
+  return;
+}
+
 /*-----------------------------------------------------------*/
 
 void vApplicationStackOverflowHook(xTaskHandle * pxTask,

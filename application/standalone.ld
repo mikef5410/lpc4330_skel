@@ -25,11 +25,12 @@
  * This is part of revision 1392 of the Stellaris Peripheral Driver Library.
  *
  *****************************************************************************/
+_HEAP_SIZE = DEFINED(_HEAP_SIZE) ? _HEAP_SIZE : 0x100;
 
 MEMORY
 {
-    FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 256K
-    SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 64K
+    FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 8M
+    SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 192K
 }
 
 SECTIONS
@@ -57,7 +58,6 @@ SECTIONS
             KEEP(*(.gcc_except_table.*))
     } >SRAM
 
-
     .bss :
     {
         _bss = .;
@@ -65,4 +65,14 @@ SECTIONS
         *(COMMON)
         _ebss = .;
     } > SRAM
+
+   .heap : 
+       {
+        . = ALIGN(8);
+        _heap = .;
+        _heap_start = .;
+        . += _HEAP_SIZE;
+        _heap_end = .;
+      } > SRAM
+
 }
