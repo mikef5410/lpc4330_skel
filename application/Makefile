@@ -75,7 +75,7 @@ CFLAGS += $(DEBUG) $(INCLUDE) \
 	 -D CORE_M4 -mcpu=$(CPU) -mthumb -march=$(ARCH) \
 	 $(OPTIM) -T$(LDSCRIPT) \
 
-APP_SRCS =startup.c main.c sys_init.c tek_board_init.c
+APP_SRCS =startup.c main.c sys_init.c tek_board_init.c syscalls.c
 APP_OBJS = $(call CALC_OBJS,$(APP_SRCS))
 
 LIBS= libFreeRTOS.a liblpcopen.a
