@@ -77,17 +77,14 @@ LIBS= libFreeRTOS.a liblpcopen.a
 VPATH=.:$(RTOS_SOURCE_DIR):$(RTOS_SOURCE_DIR)/portable/MemMang:$(RTOS_SOURCE_DIR)/portable/$(FREERTOS_PORT):$(LPCCHIP_COMMON):$(LPCCHIP):$(LPCIP):board:board/board_common
 all: $(PROG).elf
 
-libFreeRTOS.a: $(FREERTOS_OBJS)
-	$(AR) cr $@ $?
+libFreeRTOS.a: libFreeRTOS.a($(FREERTOS_OBJS))
 	$(RANLIB) $@
-	$(RM) -f $?
 
-liblpcopen.a: $(LPCOPEN_OBJS)
-	$(AR) cr $@ $?
+
+liblpcopen.a: liblpcopen.a($(LPCOPEN_OBJS))
 	$(RANLIB) $@
-	$(RM) -f $?
 
-$(PROG).elf : libFreeRTOS.a liblpcopen.a $(APP_OBJS) Makefile
+$(PROG).elf : libFreeRTOS.a($(FREERTOS_OBJS)) liblpcopen.a($(LPCOPEN_OBJS)) $(APP_OBJS) Makefile
 	$(CC) $(CFLAGS) $(APP_OBJS) $(LIBS) $(LINKER_FLAGS)
 	$(SIZE) $(PROG).elf
 
