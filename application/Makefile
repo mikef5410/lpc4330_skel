@@ -17,7 +17,6 @@ CHIP ?= CHIP_LPC43XX
 FLASHK ?= 512
 RAMK ?= 192
 
-
 ## LPCOPEN Definifions
 LPCOPEN := $(PROJ_ROOT)/external/lpcopen/lpcopen
 LPCCHIP := $(LPCOPEN)/software/lpc_core/lpc_chip/chip_18xx_43xx
@@ -33,10 +32,27 @@ LPC_INC= -I $(LPCCHIP) -I $(LPCIP) -I $(LPCCHIP_COMMON) -I $(CMSIS_INC)
 
 ## FreeRTOS Definitions
 RTOS_SOURCE_DIR := $(PROJ_ROOT)/FreeRTOS/Source
-FREERTOS_PORT := GCC/ARM_CM3
+FREERTOS_PORT := GCC/ARM_CM4F
 FREERTOS_INC := -I $(RTOS_SOURCE_DIR)/include -I $(RTOS_SOURCE_DIR)/portable/MemMang -I $(RTOS_SOURCE_DIR)/portable/$(FREERTOS_PORT)
 FREERTOS_SRCS := list.c queue.c tasks.c timers.c croutine.c port.c heap_2.c
 FREERTOS_OBJS := $(call CALC_OBJS,$(FREERTOS_SRCS))
+
+# Switch FPU on/off based on which FreeRTOS port we use
+#
+ifeq ($(FREERTOS_PORT),GCC/ARM_CM4F)
+	USE_FPU = yes
+else
+	USE_FPU = no
+endif
+
+ifeq ($(USE_FPU),yes)
+#  -mthumb -mcpu=cortex-m4 -mfloat-abi=hard 
+#  USE_OPT += -mfloat-abi=softfp -mfpu=fpv4-sp-d16 -fsingle-precision-constant
+  CFLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fsingle-precision-constant
+  CPPFLAGS += -DCORTEX_USE_FPU=TRUE -D__TARGET_FPU_VFP=TRUE
+else
+  CPPFLAGS += -DCORTEX_USE_FPU=FALSE
+endif
 
 PROG = RTOSDemo
 
@@ -49,7 +65,7 @@ DEBUG=-g
 OPTIM=-O0
 INCLUDE=-I . $(FREERTOS_INC) $(LPC_INC)
 
-CFLAGS = $(DEBUG) $(INCLUDE) \
+CFLAGS += $(DEBUG) $(INCLUDE) \
 	 -D CORE_M4 -mcpu=$(CPU) -mthumb -march=$(ARCH) \
 	 $(OPTIM) -T$(LDSCRIPT) \
 
@@ -71,7 +87,7 @@ liblpcopen.a: $(LPCOPEN_OBJS)
 	$(RANLIB) $@
 	$(RM) -f $?
 
-$(PROG).elf : $(OBJS) startup.o Makefile
+$(PROG).elf : libFreeRTOS.a liblpcopen.a $(OBJS) startup.o Makefile
 	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(LINKER_FLAGS)
 	$(TOOLPREFIX-size) $(PROG).axf
 
