@@ -41,9 +41,9 @@ static void IntDefaultHandler(void);
 //
 //*****************************************************************************
 extern int main(void);
-extern void xPortPendSVHandler(void);
-extern void xPortSysTickHandler(void);
-extern void vPortSVCHandler(void);
+extern void PendSV_Handler(void);
+extern void SysTick_Handler(void);
+extern void SVC_Handler(void);
 extern void Timer0IntHandler(void);
 
 //*****************************************************************************
@@ -78,11 +78,11 @@ void (*const g_pfnVectors[]) (void) =
 	0,			// Reserved
 	0,			// Reserved
 	0,			// Reserved
-	vPortSVCHandler,	// SVCall handler
+	SVC_Handler,	        // SVCall handler
 	IntDefaultHandler,	// Debug monitor handler
 	0,			// Reserved
-	xPortPendSVHandler,	// The PendSV handler
-	xPortSysTickHandler,	// The SysTick handler
+        PendSV_Handler,	        // The PendSV handler
+	SysTick_Handler,	// The SysTick handler
 	IntDefaultHandler,	// GPIO Port A
 	IntDefaultHandler,	// GPIO Port B
 	IntDefaultHandler,	// GPIO Port C

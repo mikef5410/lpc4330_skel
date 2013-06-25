@@ -97,7 +97,7 @@ int main(void)
   SystemInit();
   Board_Init();
 
-    UARTprintf("I'm here\n");
+    //UARTprintf("I'm here\n");
 
     /* Start the tasks defined within this file/specific to this demo. */
     xTaskCreate(vLEDTask, (signed portCHAR *) "LED",
@@ -105,7 +105,7 @@ int main(void)
 
     /* Configure the high frequency interrupt used to measure the interrupt
        jitter time. */
-    vSetupHighFrequencyTimer();
+    //vSetupHighFrequencyTimer();
 
     /* Start the scheduler. */
     vTaskStartScheduler();
