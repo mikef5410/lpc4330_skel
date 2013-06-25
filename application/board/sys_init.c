@@ -235,7 +235,7 @@ void SystemInit(void)
 	*pSCB_VTOR = (unsigned int) &__Vectors;
 
 #if defined(__FPU_PRESENT) && __FPU_PRESENT == 1
-	fpuInit();
+	//fpuInit();
 #endif
 
 	/* Setup system clocking and memory. This is done early to allow the

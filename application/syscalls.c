@@ -11,8 +11,8 @@
 
 
 static char *heap_ptr;          /* Points to current end of the heap.   */
-extern char *_heap_start;       /* Setup in our linker script */
-extern char *_heap_end;
+extern char *__heap_start;       /* Setup in our linker script */
+extern char *__heap_end;
 /************************** _sbrk_r *************************************/
 /*  Support function.  Adjusts end of heap to provide more memory to    */
 /* memory allocator. Simple and dumb with no sanity checks.             */
@@ -32,11 +32,11 @@ void * _sbrk_r(
         char  *base;            /*  errno should be set to  ENOMEM on error     */
 
         if (!heap_ptr) {        /*  Initialize if first time through.           */
-                heap_ptr = _heap_start;
+                heap_ptr = __heap_start;
         }
         base = heap_ptr;        /*  Point to end of heap.                       */
 
-        if (heap_ptr + nbytes > _heap_end) {
+        if (heap_ptr + nbytes > __heap_end) {
           return((void *) -1);            /* Failure out of mem, We should set errno to ENOMEM, too */
         }
 
