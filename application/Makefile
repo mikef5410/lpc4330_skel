@@ -23,10 +23,16 @@ LPCCHIP := $(LPCOPEN)/software/lpc_core/lpc_chip/chip_18xx_43xx
 LPCCHIP_COMMON := $(LPCOPEN)/software/lpc_core/lpc_chip/chip_common
 LPCIP := $(LPCOPEN)/software/lpc_core/lpc_ip
 CMSIS_INC := $(LPCOPEN)/software/CMSIS/CMSIS/Include
-CORE_CHIP_SRCS = adc_18xx_43xx.c ccan_18xx_43xx.c clock_18xx_43xx.c dac_18xx_43xx.c enet_18xx_43xx.c gpdma_18xx_43xx.c
-CORE_CHIP_SRCS += i2c_18xx_43xx.c i2s_18xx_43xx.c
-CORE_CHIP_SRCS += rtc_18xx_43xx.c ssp_18xx_43xx.c timer_18xx_43xx.c uart_18xx_43xx.c wwdt_18xx_43xx.c
-CORE_IP_SRCS = adc_001.c atimer_001.c ccan_001.c dac_001.c emc_001.c enet_001.c gpdma_001.c gpiogrpint_001.c gpiopinint_001.c i2c_001.c i2s_001.c lcd_001.c ritimer_001.c rtc_001.c sct_001.c sdmmc_001.c ssp_001.c timer_001.c usart_001.c wwdt_001.c eeprom_002.c
+CORE_CHIP_SRCS = adc_18xx_43xx.c dac_18xx_43xx.c gpdma_18xx_43xx.c otp_18xx_43xx.c sct_18xx_43xx.c \
+                 timer_18xx_43xx.c aes_18xx_43xx.c eeprom_18xx_43xx.c gpio_18xx_43xx.c pmc_18xx_43xx.c \
+                 scu_18xx_43xx.c uart_18xx_43xx.c atimer_18xx_43xx.c emc_18xx_43xx.c i2c_18xx_43xx.c \
+                 rgu_18xx_43xx.c sdif_18xx_43xx.c wwdt_18xx_43xx.c ccan_18xx_43xx.c enet_18xx_43xx.c \
+                 i2s_18xx_43xx.c ritimer_18xx_43xx.c sdmmc_18xx_43xx.c clock_18xx_43xx.c evrt_18xx_43xx.c \
+                 lcd_18xx_43xx.c rtc_18xx_43xx.c ssp_18xx_43xx.c 
+CORE_IP_SRCS = adc_001.c atimer_001.c ccan_001.c dac_001.c emc_001.c enet_001.c gpdma_001.c \
+               gpiogrpint_001.c gpiopinint_001.c i2c_001.c i2s_001.c lcd_001.c ritimer_001.c \
+               rtc_001.c sct_001.c sdmmc_001.c ssp_001.c timer_001.c usart_001.c wwdt_001.c \
+               eeprom_002.c
 LPCOPEN_OBJS := $(call CALC_OBJS,$(CORE_IP_SRCS) $(CORE_CHIP_SRCS))
 LPC_INC= -I $(LPCCHIP) -I $(LPCIP) -I $(LPCCHIP_COMMON) -I $(CMSIS_INC)
 
@@ -96,6 +102,8 @@ download.cmd: Makefile
 download: $(PROG).elf download.cmd
 	$(OPENOCD)  -f board/ek-lm3s3748.cfg -f download.cmd
 
+clean:
+	$(RM) -f *.o *.a
 
 ############
 # Source indexing with cscope, idutils and etags 
