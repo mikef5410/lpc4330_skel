@@ -102,14 +102,12 @@ download.cmd: Makefile
 download: $(PROG).elf download.cmd
 	$(OPENOCD)  -f board/ek-lm3s3748.cfg -f download.cmd
 
-clean:
-	$(RM) -f *.o *.a
 
 ############
 # Source indexing with cscope, idutils and etags 
 ############
 cscope id etags tags: FILETYPES:=-iname "*.cpp" -o -iname "*.hpp" -o -name "*.S" -o -iname "*.c" -o -iname "*.h" -o -name "*.s" -o -name "*.cc"
-cscope id etags tags: INDEX_FILES:=$(shell (find  . $(RTOS_SOURCE_DIR) $(LPCCHIP) $(LPCIP) $(FILETYPES)))
+cscope id etags tags: INDEX_FILES:=$(shell (find  . $(RTOS_SOURCE_DIR) $(LPCCHIP) $(LPCCHIP_COMMON) $(LPCIP) $(FILETYPES)))
 
 cscope:
 	@echo cscope ...
@@ -133,7 +131,6 @@ cleantags:
 
 
 clean : cleantags
-	touch Makefile
-	rm $(OBJS) $(PROG).bin $(PROG).axf $(PROG).map
+	rm -f $(OBJS) $(PROG).elf $(LIBS) $(PROG).map \#* *~ *.o
 
 
