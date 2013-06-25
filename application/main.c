@@ -10,7 +10,7 @@
  * "Check" hook -  This only executes every five seconds from the tick hook.
  * Its main function is to check that all the standard demo tasks are still
  * operational.  Should any unexpected behaviour within a demo task be discovered
- * the tick hook will write an error to the OLED (via the OLED task).  If all the
+ * the tick hook will write an error to the OLED (via the OLED task).  If all thqe
  * demo tasks are executing with their expected behaviour then the check task
  * writes PASS to the OLED (again via the OLED task), as described above.
  *
@@ -25,25 +25,6 @@
 #include "queue.h"
 #include "semphr.h"
 
-//3S3748 is a dustdevil device
-#define TARGET_IS_DUSTDEVIL_RA0
-
-/* Hardware library includes. */
-#include "inc/lm3s3748.h"
-#include "inc/hw_sysctl.h"
-#include "inc/hw_memmap.h"
-#include "inc/hw_types.h"
-#include "driverlib/rom.h"
-#include "driverlib/sysctl.h"
-#include "driverlib/gpio.h"
-#include "utils/cmdline.h"
-#include "utils/uartstdio.h"
-#include "grlib/grlib.h"
-#include "formike128x128x16.h"
-
-//App includes
-#include "lcd_message.h"
-#include "bitmap.h"
 
 
 /*-- ---------------------------------------------------------*/
@@ -85,14 +66,11 @@ tick hook. */
  * access the display directly.  Other tasks wanting to display a message send
  * the message to the gatekeeper.
  */
-static void vOLEDTask(void *pvParameters);
-static void vCMDTask(void *pvParameters);
-
 /*
  * Configure the hardware for the demo.
  */
-static void prvSetupHardware(void);
-
+void SysInit(void);
+void Board_Init(void);
 /*
  * Configures the high frequency timers - those used to measure the timing
  * jitter while the real time kernel is executing.
@@ -127,8 +105,9 @@ int status = 0;
  *************************************************************************/
 int main(void)
 {
-    prvSetupHardware();
-
+  SysInit();
+  Board_Init();
+#if 0
     UARTprintf("I'm here\n");
     /* Create the queue used by the OLED task.  Messages for display on the OLED
        are received via this queue. */
@@ -153,7 +132,7 @@ int main(void)
     /* Will only get here if there was insufficient memory to create the idle
        task. */
     for (;;);
-        
+#endif        
     return 0;
 }
 

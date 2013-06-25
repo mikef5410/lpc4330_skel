@@ -24,7 +24,7 @@
  * this code.
  */
 
-#include "tek_board_4330.h"
+#include "tek_board_init.h"
 
 /*
  * The System initialization code is called prior to the application and

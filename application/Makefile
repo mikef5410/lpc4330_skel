@@ -57,24 +57,24 @@ endif
 PROG = RTOSDemo
 
 # should use --gc-sections but the debugger does not seem to be able to cope with the option.
-LINKER_FLAGS=-nostartfiles -Xlinker -o$(AXF) -Xlinker -M -Xlinker -Map=$(PROG).map -Xlinker --no-gc-sections
+LINKER_FLAGS=-nostartfiles -Xlinker -o$(PROG).elf -Xlinker -M -Xlinker -Map=$(PROG).map -Xlinker --no-gc-sections
 
 # --eh-frame-hdr
 
 DEBUG=-g
 OPTIM=-O0
-INCLUDE=-I . $(FREERTOS_INC) $(LPC_INC)
+INCLUDE=-I . $(FREERTOS_INC) $(LPC_INC) -I board/board_common -I board
 
 CFLAGS += $(DEBUG) $(INCLUDE) \
 	 -D CORE_M4 -mcpu=$(CPU) -mthumb -march=$(ARCH) \
 	 $(OPTIM) -T$(LDSCRIPT) \
 
-APP_SRCS =startup.c main.c
+APP_SRCS =startup.c main.c sys_init.c tek_board_init.c
 APP_OBJS = $(call CALC_OBJS,$(APP_SRCS))
 
 LIBS= libFreeRTOS.a liblpcopen.a
 
-VPATH=.:$(RTOS_SOURCE_DIR):$(RTOS_SOURCE_DIR)/portable/MemMang:$(RTOS_SOURCE_DIR)/portable/$(FREERTOS_PORT):$(LPCCHIP_COMMON):$(LPCCHIP):$(LPCIP)
+VPATH=.:$(RTOS_SOURCE_DIR):$(RTOS_SOURCE_DIR)/portable/MemMang:$(RTOS_SOURCE_DIR)/portable/$(FREERTOS_PORT):$(LPCCHIP_COMMON):$(LPCCHIP):$(LPCIP):board:board/board_common
 all: $(PROG).elf
 
 libFreeRTOS.a: $(FREERTOS_OBJS)
@@ -87,13 +87,9 @@ liblpcopen.a: $(LPCOPEN_OBJS)
 	$(RANLIB) $@
 	$(RM) -f $?
 
-$(PROG).elf : libFreeRTOS.a liblpcopen.a $(OBJS) startup.o Makefile
-	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(LINKER_FLAGS)
-	$(TOOLPREFIX-size) $(PROG).axf
-
-$(OBJS) : %.o : %.c Makefile FreeRTOSConfig.h
-	$(CC) -c $(CFLAGS) $< -o $@
-
+$(PROG).elf : libFreeRTOS.a liblpcopen.a $(APP_OBJS) Makefile
+	$(CC) $(CFLAGS) $(APP_OBJS) $(LIBS) $(LINKER_FLAGS)
+	$(SIZE) $(PROG).elf
 
 
 
