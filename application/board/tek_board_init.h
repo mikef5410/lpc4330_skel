@@ -48,28 +48,34 @@ extern "C" {
  * 
  */
 
-/** @defgroup BOARD_NGX_XPLORER_1830_OPTIONS BOARD: LPC1830 NGX Xplorer board builds options
- * This board has options that configure its operation at build-time.<br>
+
+/*---------------------------------------------------------------------------------------------------------------------+
+| GPIO pin used for LEDs 1 and 2
++---------------------------------------------------------------------------------------------------------------------*/
+
+/// GPIO ports to which LED's are connected
+/// Tek gen-1 controller: orange LED1 is on P6_6, pin 83 -> GPIO-0, pin 5
+/// Tek gen-1 controller: red    LED2 is on P6_7, pin 85 -> GPIO-5, pin 15
+enum { LED1_GPIO = 0 };
+enum { LED2_GPIO = 5 };
+
+/// pin numbers of LED1, LED2
+enum { LED1_pin = 5 };
+enum { LED2_pin = 15 };
+
+/// LED's pin masks
+enum { LED1 = 1 << LED1_pin };
+enum { LED2 = 1 << LED2_pin };
+
+/// bit-band "variable" to directly handle the pins
+#define LED1_bb	BITBAND(&LPC_GPIO_PORT->PIN[LED1_GPIO], LED1_pin)
+#define LED2_bb	BITBAND(&LPC_GPIO_PORT->PIN[LED2_GPIO], LED2_pin)
+
+
+/** @defgroup BOARD_NGX_XPLORER_1830_OPTIONS BOARD: LPC4330 NGX Xplorer board options
+ * This board has options that configure its operation at build-time.
  *
- * For more information on driver options see<br>
- * @ref LPCOPEN_DESIGN_ARPPROACH<br>
- * @{
- */
-
-/**
- * @}
- */
-
-/** @defgroup BOARD_NGX_XPLORER_4330_OPTIONS BOARD: LPC4330 NGX Xplorer board builds options
- * This board has options that configure its operation at build-time.<br>
  *
- * For more information on driver options see<br>
- * @ref LPCOPEN_DESIGN_ARPPROACH<br>
- * @{
- */
-
-/**
- * @}
  */
 
 #define BOARD_NGX_XPLORER_18304330

@@ -1,0 +1,4 @@
+cscope.out*
+*.o
+libFreeRTOS.a
+liblpcopen.a

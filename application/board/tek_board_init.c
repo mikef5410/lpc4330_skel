@@ -99,6 +99,24 @@ void Board_UARTPutSTR(char *str)
 
 static void Board_LED_Init()
 {
+	// on the Tek controller board, LED2 is on pin 85, whose SCU map is
+    //    defined on page 198 of the Rev 1.4 User Manual (3 Sept 2012)
+	//       state 0    reserved
+	//       state 1    EMC_A15
+	//       state 2    SGPIO6      SGPIO6 (serial GPIO6)
+	//       state 3    USB0_IND1   USB port 1 indicator LED
+	//       state 4    GPIO6[15]   General-Purpose IO 6
+	//       state 5    T2_MAT0     timer T2 match output 0
+
+	// MODE = function, for GPIO pin 85, it is function 4
+	// EPD  = Enable pull down
+	LPC_SCU->SFSP6_7 = 0x04; // // | EPD=0 | EPUN=0 | EHS=0 (could set to 1) | EZI=0 | ZIF=0
+ 
+	LPC_GPIO_PORT->DIR[LED1_GPIO] |= LED1;	// configure GPIO pins as output
+	LPC_GPIO_PORT->DIR[LED2_GPIO] |= LED2;
+
+
+
 	/* P2.12 : LED D2 as output */
 	Chip_GPIO_WriteDirBit(LPC_GPIO_PORT, 1, 12, true);
 
@@ -187,12 +205,21 @@ void Board_Init(void)
 	/* Initializes GPIO */
 	Chip_GPIO_Init(LPC_GPIO_PORT);
 
-	/* Setup GPIOs for USB demos */
-	Chip_SCU_PinMuxSet(0x2, 6, (SCU_MODE_MODE_INACT | SCU_MODE_INBUFF_EN | SCU_MODE_FUNC4));			/* P2_6 USB1_PWR_EN, USB1 VBus function */
-	Chip_SCU_PinMuxSet(0x2, 5, (SCU_MODE_MODE_PULLUP | SCU_MODE_INBUFF_EN | SCU_MODE_ZIF_DIS | SCU_MODE_FUNC2));	/* P2_5 USB1_VBUS, MUST CONFIGURE THIS SIGNAL FOR USB1 NORMAL OPERATION */
-	Chip_SCU_PinMuxSet(0x1, 7, (SCU_MODE_MODE_INACT | SCU_MODE_INBUFF_EN | SCU_MODE_FUNC4));			/* P1_7 USB0_PWR_EN, USB0 VBus function Xplorer */
-	Chip_GPIO_WriteDirBit(LPC_GPIO_PORT, 5, 6, true);							/* GPIO5[6] = USB1_PWR_EN */
-	Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 5, 6, true);							/* GPIO5[6] output high */
+	/* The next 3 PinMux settings control GPIOs for USB on the Xplorer board */
+
+	/* P2_6 USB1_PWR_EN, USB1 VBus function */
+	Chip_SCU_PinMuxSet(0x2, 6, (SCU_MODE_MODE_INACT | SCU_MODE_INBUFF_EN | SCU_MODE_FUNC4));
+
+	/* P2_5 USB1_VBUS, MUST CONFIGURE THIS SIGNAL FOR USB1 NORMAL OPERATION */
+	Chip_SCU_PinMuxSet(0x2, 5, (SCU_MODE_MODE_PULLUP | SCU_MODE_INBUFF_EN | SCU_MODE_ZIF_DIS | SCU_MODE_FUNC2));
+
+	/* P1_7 USB0_PWR_EN, USB0 VBus function Xplorer */
+	Chip_SCU_PinMuxSet(0x1, 7, (SCU_MODE_MODE_INACT | SCU_MODE_INBUFF_EN | SCU_MODE_FUNC4));
+
+	/* GPIO5[6] = USB1_PWR_EN as output */
+	Chip_GPIO_WriteDirBit (LPC_GPIO_PORT, 5, 6, true);
+	/* GPIO5[6] output high */
+	Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 5, 6, true);
 
 	/* Initialize LEDs */
 	Board_LED_Init();
