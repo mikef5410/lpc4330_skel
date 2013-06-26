@@ -41,7 +41,7 @@
 #define USE_RMII
 
 /* Un-comment DEBUG_ENABLE for IO support via the UART */
-// #define DEBUG_ENABLE
+#define DEBUG_ENABLE
 
 /* Enable DEBUG_SEMIHOSTING along with DEBUG to enable IO support
    via semihosting */
