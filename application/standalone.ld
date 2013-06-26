@@ -9,7 +9,7 @@ MEMORY
   RamAHB32 (rwx) : ORIGIN = 0x20000000, LENGTH = 0x8000 /* 32k */
   RamAHB16 (rwx) : ORIGIN = 0x20008000, LENGTH = 0x4000 /* 16k */
   RamAHB_ETB16 (rwx) : ORIGIN = 0x2000c000, LENGTH = 0x4000 /* 16k */
-  FLASH (rx) : ORIGIN = 0x0, LENGTH = 8M   /* SPIFI code gets mapped to address 0 at boot time */
+  FLASH (rx) : ORIGIN = 0x14000000, LENGTH = 8M  
 }
 
 REGION_ALIAS("RAM", RamLoc128);  /*Put everything here for now */
