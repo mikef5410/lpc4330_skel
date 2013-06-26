@@ -95,13 +95,8 @@ $(PROG).elf : libFreeRTOS.a($(FREERTOS_OBJS)) liblpcopen.a($(LPCOPEN_OBJS)) $(AP
 	$(CC) $(CFLAGS) $(APP_OBJS) $(LIBS) $(LINKER_FLAGS)
 	$(SIZE) $(PROG).elf
 
-
-
-download.cmd: Makefile
-	/bin/echo -e "FIXME!!!! init\nhalt\nsleep 200\nwait_halt\nflash write_image erase $(AXF)\nsleep 200\nreset run\nshutdown\n" > download.cmd
-
 download: $(PROG).elf download.cmd
-	$(OPENOCD)  -f board/ek-lm3s3748.cfg -f download.cmd
+	$(OPENOCD) -f openocd.cfg -c "burnbabyburn $(PROG).elf" -c "shutdown"
 
 
 ############
