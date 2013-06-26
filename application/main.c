@@ -59,7 +59,7 @@ static portTASK_FUNCTION(vUARTTask, pvParameters) {
 	int tickCnt = 0;
 
 	while (1) {
-		// DEBUGOUT("Tick: %d \r\n", tickCnt);
+		//DEBUGOUT("Tick: %d \r\n", tickCnt);
 		tickCnt++;
 
 		// About a 1s delay
@@ -99,4 +99,10 @@ int main(void)
 void vApplicationStackOverflowHook( xTaskHandle xTask, signed char *pcTaskName )
 {
   return;
+}
+
+void _exit(int status)
+{
+  while(1) {
+  }
 }

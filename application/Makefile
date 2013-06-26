@@ -63,7 +63,8 @@ endif
 PROG = RTOSDemo
 
 # should use --gc-sections but the debugger does not seem to be able to cope with the option.
-LINKER_FLAGS=-nostartfiles -Xlinker -o$(PROG).elf -Xlinker -M -Xlinker -Map=$(PROG).map -Xlinker --no-gc-sections
+LINKER_FLAGS=-nostartfiles -Xlinker -o$(PROG).elf -Xlinker -M -Xlinker -Map=$(PROG).map -Xlinker --gc-sections
+#LINKER_FLAGS=-Xlinker -o$(PROG).elf -Xlinker -M -Xlinker -Map=$(PROG).map -Xlinker --gc-sections
 
 # --eh-frame-hdr
 
