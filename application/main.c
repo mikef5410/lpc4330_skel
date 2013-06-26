@@ -71,7 +71,7 @@ int main(void)
 {
 	Board_Init();
 	// KBD_Init();
-	Board_LED_Set(0, false); // Initial LED1 state is off
+	Board_LED_Set(0, true); // Initial LED1 state is off
 	Board_LED_Set(1, false); // Initial LED2 state is off
 
 	// LED1 toggle thread
@@ -88,6 +88,7 @@ int main(void)
 	xTaskCreate(vUARTTask, (signed char *) "vTaskUart",
 				configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
 				(xTaskHandle *) NULL);
+
 
 	// start the scheduler
 	vTaskStartScheduler();

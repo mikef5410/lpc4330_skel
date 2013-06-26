@@ -208,7 +208,7 @@ void (* const FlashVectors[])(void) = {
 };
 
 #define NVECS 68
-void (*RAMVectors[NVECS])(void);
+void (*RAMVectors[NVECS])(void) __attribute__ ((aligned(32)));
 
 extern void SystemInit(void);
 extern void __data_start__;
@@ -230,15 +230,10 @@ extern unsigned int __bss_section_table_end;
 //*****************************************************************************
 void Reset_Handler(void) {
 
+
     /* Call SystemInit() for clocking/memory setup prior to scatter load */
     SystemInit();
 
-    // copy the interrupt vector table to RAM and point to it
-    memcpy(&RAMVectors,&FlashVectors,sizeof(RAMVectors));
-#if defined(CORE_M3) || defined(CORE_M4)
-    unsigned int *pSCB_VTOR = (unsigned int *) 0xE000ED08;
-    *pSCB_VTOR = (unsigned int) &RAMVectors;
-#endif
     //
     // Copy the data sections from flash to SRAM.
     //
@@ -262,6 +257,13 @@ void Reset_Handler(void) {
       SectionLen = *SectionTableAddr++;
       memset((void *)ExeAddr, 0, SectionLen);
     }
+
+    // copy the interrupt vector table to RAM and point to it
+    memcpy(&RAMVectors,&FlashVectors,sizeof(RAMVectors));
+#if defined(CORE_M3) || defined(CORE_M4)
+    unsigned int *pSCB_VTOR = (unsigned int *) 0xE000ED08;
+    *pSCB_VTOR = (unsigned int) &RAMVectors;
+#endif
 
 #if defined (__cplusplus)
 	//
