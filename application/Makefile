@@ -95,7 +95,7 @@ $(PROG).elf : libFreeRTOS.a($(FREERTOS_OBJS)) liblpcopen.a($(LPCOPEN_OBJS)) $(AP
 	$(CC) $(CFLAGS) $(APP_OBJS) $(LIBS) $(LINKER_FLAGS)
 	$(SIZE) $(PROG).elf
 
-download: $(PROG).elf download.cmd
+download: $(PROG).elf
 	$(OPENOCD) -f openocd.cfg -c "burnbabyburn $(PROG).elf" -c "shutdown"
 
 
