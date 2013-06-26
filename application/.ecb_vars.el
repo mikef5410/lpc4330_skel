@@ -25,7 +25,7 @@
          )
     (cscope-set-initial-directory builddir)
     (custom-set-variables cvar)
-    ;;(setq gud-gdb-command-name (format "xxx-gdb -nw -cd %S --annotate=3 Control/executable.elf" edk))
+    (setq gud-gdb-command-name (format "arm-none-eabi-gdb -f --interpreter=mi2 -n -x .gdbinit -cd %S RTOSDemo.elf" builddir))
     (print "OK." )
     (ecb-activate) ;;start ecb
     )
