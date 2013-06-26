@@ -110,7 +110,7 @@ static void Board_LED_Init()
 
 	// MODE = function, for GPIO pin 85, it is function 4
 	// EPD  = Enable pull down
-	LPC_SCU->SFSP6_7 = 0x04; // // | EPD=0 | EPUN=0 | EHS=0 (could set to 1) | EZI=0 | ZIF=0
+	LPC_SCU->SFSP[6][7] = SCU_MODE_FUNC4|SCU_MODE_14MA_DRIVESTR; // // | EPD=0 | EPUN=0 | EHS=0 (could set to 1) | EZI=0 | ZIF=0
  
 	LPC_GPIO_PORT->DIR[LED1_GPIO] |= LED1;	// configure GPIO pins as output
 	LPC_GPIO_PORT->DIR[LED2_GPIO] |= LED2;

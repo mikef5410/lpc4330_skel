@@ -95,3 +95,8 @@ int main(void)
 	// should never happen
 	return 1;
 }
+
+void vApplicationStackOverflowHook( xTaskHandle xTask, signed char *pcTaskName )
+{
+  return;
+}

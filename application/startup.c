@@ -125,13 +125,15 @@ extern void __StackTop(void);
 #endif
 
 //*****************************************************************************
-// The vector table.
+// The vector table. This one's in Flash. placed at offset 0x0 so it's 
+// available right at bootup. We'll copy it to RAM and change VTOR to point
+// to the RAM copy in the reset handler. Then runtime code can change
+// interrupt vectors. 
 //*****************************************************************************
-
-extern void (* const g_pfnVectors[])(void);
+extern void (* const FlashVectors[])(void);
 
 __attribute__ ((section(".isr_vector")))
-void (* const g_pfnVectors[])(void) = {
+void (* const FlashVectors[])(void) = {
 	// Core Level - CM4/CM3
 	&__StackTop,	                           // The initial stack pointer
 	Reset_Handler,						// The reset handler
@@ -205,6 +207,8 @@ void (* const g_pfnVectors[])(void) = {
 	QEI_IRQHandler,					// 68 QEI
 };
 
+#define NVECS 68
+void (*RAMVectors[NVECS])(void);
 
 extern void SystemInit(void);
 extern void __data_start__;
@@ -226,15 +230,21 @@ extern unsigned int __bss_section_table_end;
 //*****************************************************************************
 void Reset_Handler(void) {
 
+    /* Call SystemInit() for clocking/memory setup prior to scatter load */
+    SystemInit();
+
+    // copy the interrupt vector table to RAM and point to it
+    memcpy(&RAMVectors,&FlashVectors,sizeof(RAMVectors));
+#if defined(CORE_M3) || defined(CORE_M4)
+    unsigned int *pSCB_VTOR = (unsigned int *) 0xE000ED08;
+    *pSCB_VTOR = (unsigned int) &RAMVectors;
+#endif
     //
     // Copy the data sections from flash to SRAM.
     //
 	unsigned int LoadAddr, ExeAddr, SectionLen;
 	unsigned int *SectionTableAddr;
 
-    /* Call SystemInit() for clocking/memory setup prior to scatter load */
-    SystemInit();
- 
     // Load base address of Global Section Table
     SectionTableAddr = &__data_section_table;
 

@@ -229,11 +229,6 @@ STATIC void SystemSetupMemory(void)
 void SystemInit(void)
 {
 #if defined(CORE_M3) || defined(CORE_M4)
-	unsigned int *pSCB_VTOR = (unsigned int *) 0xE000ED08;
-
-	extern void *__Vectors;
-	*pSCB_VTOR = (unsigned int) &__Vectors;
-
 #if defined(__FPU_PRESENT) && __FPU_PRESENT == 1
 	//fpuInit();
 #endif
