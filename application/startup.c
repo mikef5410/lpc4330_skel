@@ -243,14 +243,14 @@ void Reset_Handler(void) {
       LoadAddr = *SectionTableAddr++;
       ExeAddr = *SectionTableAddr++;
       SectionLen = *SectionTableAddr++;
-      memcpy(ExeAddr, LoadAddr, SectionLen);
+      memcpy((void *)ExeAddr, (void *)LoadAddr, SectionLen);
     }
     // At this point, SectionTableAddr = &__bss_section_table;
     // Zero fill the bss segments
     while (SectionTableAddr < &__bss_section_table_end) {
       ExeAddr = *SectionTableAddr++;
       SectionLen = *SectionTableAddr++;
-      memset(ExeAddr, 0, SectionLen);
+      memset((void *)ExeAddr, 0, SectionLen);
     }
 
 #if defined (__cplusplus)
