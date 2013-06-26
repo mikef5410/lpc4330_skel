@@ -70,7 +70,7 @@ static portTASK_FUNCTION(vUARTTask, pvParameters) {
 int main(void)
 {
 	Board_Init();
-	// KBD_Init();
+
 	Board_LED_Set(0, true); // Initial LED1 state is off
 	Board_LED_Set(1, false); // Initial LED2 state is off
 
