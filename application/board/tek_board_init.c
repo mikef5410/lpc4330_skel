@@ -112,39 +112,38 @@ static void Board_LED_Init()
 	// EPD  = Enable pull down
 	LPC_SCU->SFSP[6][7] = SCU_MODE_FUNC4|SCU_MODE_14MA_DRIVESTR; // // | EPD=0 | EPUN=0 | EHS=0 (could set to 1) | EZI=0 | ZIF=0
  
-	LPC_GPIO_PORT->DIR[LED1_GPIO] |= LED1;	// configure GPIO pins as output
-	LPC_GPIO_PORT->DIR[LED2_GPIO] |= LED2;
+	LPC_GPIO_PORT->DIR[BLINK_LED1_GPIO] |= BLINK_LED1;	// configure GPIO pins as output
+	LPC_GPIO_PORT->DIR[BLINK_LED2_GPIO] |= BLINK_LED2;
 
 
 
-	/* P2.12 : LED D2 as output */
-	Chip_GPIO_WriteDirBit(LPC_GPIO_PORT, 1, 12, true);
-
-	/* P2.11 : LED D3 as output */
-	Chip_GPIO_WriteDirBit(LPC_GPIO_PORT, 1, 11, true);
+	// Tek Blink LED1 is on GPIO-0 out 5: set as output
+	Chip_GPIO_WriteDirBit(LPC_GPIO_PORT, 0, 5, true);
+	// Tek Blink LED2 is on GPIO-5 out 15: set as output
+	Chip_GPIO_WriteDirBit(LPC_GPIO_PORT, 5, 15, true);
 
 	/* Set initial states to off (true to disable) */
-	Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 1, 12, (bool) true);
-	Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 1, 11, (bool) true);
+	Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 0, 5,  (bool) true);
+	Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 5, 15, (bool) true);
 }
 
 void Board_LED_Set(uint8_t LEDNumber, bool On)
 {
 	if (LEDNumber == 0) {
-		Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 1, 12, (bool) !On);
+		Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 0, 5, (bool) !On);
 	}
 	else if (LEDNumber == 1) {
-		Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 1, 11, (bool) !On);
+		Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 5, 15, (bool) !On);
 	}
 }
 
 bool Board_LED_Test(uint8_t LEDNumber)
 {
 	if (LEDNumber == 0) {
-		return (bool) !Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 1, 12);
+		return (bool) !Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 0, 5);
 	}
 	else if (LEDNumber == 1) {
-		return (bool) !Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 1, 11);
+		return (bool) !Chip_GPIO_ReadPortBit(LPC_GPIO_PORT, 5, 15);
 	}
 
 	return false;

@@ -56,20 +56,20 @@ extern "C" {
 /// GPIO ports to which LED's are connected
 /// Tek gen-1 controller: orange LED1 is on P6_6, pin 83 -> GPIO-0, pin 5
 /// Tek gen-1 controller: red    LED2 is on P6_7, pin 85 -> GPIO-5, pin 15
-enum { LED1_GPIO = 0 };
-enum { LED2_GPIO = 5 };
+enum { BLINK_LED1_GPIO = 0 };
+enum { BLINK_LED2_GPIO = 5 };
 
 /// pin numbers of LED1, LED2
-enum { LED1_pin = 5 };
-enum { LED2_pin = 15 };
+enum { BLINK_LED1_pin = 5 };
+enum { BLINK_LED2_pin = 15 };
 
 /// LED's pin masks
-enum { LED1 = 1 << LED1_pin };
-enum { LED2 = 1 << LED2_pin };
+enum { BLINK_LED1 = 1 << BLINK_LED1_pin };
+enum { BLINK_LED2 = 1 << BLINK_LED2_pin };
 
 /// bit-band "variable" to directly handle the pins
-#define LED1_bb	BITBAND(&LPC_GPIO_PORT->PIN[LED1_GPIO], LED1_pin)
-#define LED2_bb	BITBAND(&LPC_GPIO_PORT->PIN[LED2_GPIO], LED2_pin)
+#define BLINK_LED1_bb BITBAND(&LPC_GPIO_PORT->PIN[BLINK_LED1_GPIO], BLINK_LED1_pin)
+#define BLINK_LED2_bb BITBAND(&LPC_GPIO_PORT->PIN[BLINK_LED2_GPIO], BLINK_LED2_pin)
 
 
 /** @defgroup BOARD_NGX_XPLORER_1830_OPTIONS BOARD: LPC4330 NGX Xplorer board options
