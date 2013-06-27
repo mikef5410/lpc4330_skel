@@ -1,0 +1,6 @@
+[submodule "external/lpcopen"]
+	path = external/lpcopen
+	url = git://github.com/mikef5410/lpcopen.git
+[submodule "external/FreeRTOS"]
+	path = external/FreeRTOS
+	url = git://github.com/mikef5410/FreeRTOS.git
