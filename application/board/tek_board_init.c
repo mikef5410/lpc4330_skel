@@ -123,6 +123,8 @@ static void Board_LED_Init() {
 // and to drive the LED's are defined and initialized here
 //    - 3 GPIO pins have non-GPIO boot-up pin-mux settings
 //    - all (possible) LED's will be defaulted ON, for testing
+//    - NOTE: all LED's are negative logic: ON when GPIO is low
+//
 static void Board_KBD_Init() {
     // power switch
     LPC_SCU->SFSP[2][0] = SCU_MODE_FUNC4;                        // power  sw
@@ -137,17 +139,17 @@ static void Board_KBD_Init() {
 	// power LED-Red (non-functional in Gen-1
     LPC_SCU->SFSP[2][8] = SCU_MODE_FUNC4|SCU_MODE_14MA_DRIVESTR; // PLED_R
     Chip_GPIO_WriteDirBit (LPC_GPIO_PORT, 5, 7, true);           // output
-    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 5, 7, (bool) true);    // turn on
+    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 5, 7, (bool) false);   // turn on (neg logic)
 
 	// power LED-Green
     LPC_SCU->SFSP[2][7] = SCU_MODE_FUNC0|SCU_MODE_14MA_DRIVESTR; // PLED_G
     Chip_GPIO_WriteDirBit (LPC_GPIO_PORT, 0, 7, true);           // output
-    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 0, 7, (bool) true);    // turn on
+    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 0, 7, (bool) false);   // turn on (neg logic)
 
 	// power LED-Blue
     LPC_SCU->SFSP[2][10] = SCU_MODE_FUNC0|SCU_MODE_14MA_DRIVESTR; // PLED_B
     Chip_GPIO_WriteDirBit (LPC_GPIO_PORT, 0, 14, true);           // output 
-    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 0, 14, (bool) true);    // turn on
+    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 0, 14, (bool) false);   // turn on (neg logic)
 
 
 	// ATTENTION-LED's:
@@ -155,17 +157,17 @@ static void Board_KBD_Init() {
 	// attention LED-Red (non-functional in Gen-1
     LPC_SCU->SFSP[2][9] = SCU_MODE_FUNC4|SCU_MODE_14MA_DRIVESTR; // ALED_R
     Chip_GPIO_WriteDirBit (LPC_GPIO_PORT, 1, 10, true);
-    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 1, 10, (bool) true);
+    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 1, 10, (bool) false);
 
 	// attention LED-Green
     LPC_SCU->SFSP[2][12] = SCU_MODE_FUNC0|SCU_MODE_14MA_DRIVESTR; // ALED_G
     Chip_GPIO_WriteDirBit (LPC_GPIO_PORT, 1, 12, true);
-    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 1, 12, (bool) true);
+    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 1, 12, (bool) false);
 
 	// attention LED-Blue
     LPC_SCU->SFSP[2][11] = SCU_MODE_FUNC0|SCU_MODE_14MA_DRIVESTR; // ALED_B
     Chip_GPIO_WriteDirBit (LPC_GPIO_PORT, 1, 11, true);
-    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 1, 11, (bool) true);
+    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 1, 11, (bool) false);
 
 
 	// ENABLE-LED's:
@@ -173,17 +175,17 @@ static void Board_KBD_Init() {
 	// enable LED-Red (non-functional in Gen-1
     LPC_SCU->SFSP[6][5] = SCU_MODE_FUNC4|SCU_MODE_14MA_DRIVESTR; // ELED_R
     Chip_GPIO_WriteDirBit (LPC_GPIO_PORT, 3, 4, true);
-    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 3, 4, (bool) true);
+    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 3, 4, (bool) false);
 
 	// enable LED-Green
     LPC_SCU->SFSP[6][12] = SCU_MODE_FUNC0|SCU_MODE_14MA_DRIVESTR; // ELED_G
     Chip_GPIO_WriteDirBit (LPC_GPIO_PORT, 2, 8, true);
-    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 2, 8, (bool) true);
+    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 2, 8, (bool) false);
 
 	// enable LED-Blue
     LPC_SCU->SFSP[7][7] = SCU_MODE_FUNC0|SCU_MODE_14MA_DRIVESTR; // ELED_B
     Chip_GPIO_WriteDirBit (LPC_GPIO_PORT, 3, 15, true);
-    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 3, 15, (bool) true);
+    Chip_GPIO_WritePortBit(LPC_GPIO_PORT, 3, 15, (bool) false);
 }   // end Board_KBD_Init
 
 
